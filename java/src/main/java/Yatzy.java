@@ -29,12 +29,12 @@ public class Yatzy {
         return dice[0]==dice[4]?50:0;
     }
     
-    private int n(int n)
+    private int n(int number)
     {
         int res = 0;
         for (int i = 0; i < dice.length; i++)
         {
-            res += dice[i]==n?n:0;
+            res += dice[i]==number?number:0;
         }
     }
 
@@ -86,7 +86,7 @@ public class Yatzy {
             if (n(i) != 0 && once){
                 return first + n(i);
             }
-            if (n(i) != 0){
+            else if (n(i) != 0){
                 once = true;
                 first = n(i);
             }
@@ -125,21 +125,29 @@ public class Yatzy {
 
     public int smallStraight()
     {
-        if (dice[0] == 1 && dice[4] == 5 && chance() == 15){
+        if (dice[0]==1)
+        {
+            for (int i = 1; i < dice.length; i++)
+            {
+                if (dice[i] != dice[i-1] + 1){
+                    return 0;
+                }
+            }
             return 15;
-        }
-        else {
-            return 0;
         }
     }
 
     public static int largeStraight(int d1, int d2, int d3, int d4, int d5)
     {
-        if (dice[0] == 2 && dice[4] == 6 && chance() == 20){
+        if (dice[0]==2)
+        {
+            for (int i = 1; i < dice.length; i++)
+            {
+                if (dice[i] != dice[i-1] + 1){
+                    return 0;
+                }
+            }
             return 20;
-        }
-        else {
-            return 0;
         }
     }
 
