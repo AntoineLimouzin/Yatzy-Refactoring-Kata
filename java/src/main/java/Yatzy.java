@@ -15,7 +15,7 @@ public class Yatzy {
         Arrays.sort(dice);
     }
 
-    public int chance(int d1, int d2, int d3, int d4, int d5)
+    public int chance()
     {
         int sum = 0;
         for (int i = 0; i < dice.length; i++)
@@ -65,40 +65,33 @@ public class Yatzy {
         return n(6);
     }
    
-    public static int score_pair(int d1, int d2, int d3, int d4, int d5)
-    {
-        int[] counts = new int[6];
-        counts[d1-1]++;
-        counts[d2-1]++;
-        counts[d3-1]++;
-        counts[d4-1]++;
-        counts[d5-1]++;
-        int at;
-        for (at = 0; at != 6; at++)
-            if (counts[6-at-1] >= 2)
-                return (6-at)*2;
+    public static int score_pair()
+    {   
+        for (int i = dice.length-1; i > 0; i--)
+        {
+            if (dice[i] == dice[i-1]){
+                return 2*dice[i];
+            }
+        }
+        
         return 0;
     }
 
-    public static int two_pair(int d1, int d2, int d3, int d4, int d5)
+    public static int two_pair()
     {
-        int[] counts = new int[6];
-        counts[d1-1]++;
-        counts[d2-1]++;
-        counts[d3-1]++;
-        counts[d4-1]++;
-        counts[d5-1]++;
-        int n = 0;
-        int score = 0;
-        for (int i = 0; i < 6; i += 1)
-            if (counts[6-i-1] >= 2) {
-                n++;
-                score += (6-i);
-            }        
-        if (n == 2)
-            return score * 2;
-        else
-            return 0;
+        boolean once = false;
+        int first = 0;
+        
+        for (int i=6;i>0;i--){
+            if (n(i) != 0 && once){
+                return first + n(i);
+            }
+            if (n(i) != 0){
+                once = true;
+                first = n(i);
+            }
+        }
+        return 0;
     }
 
     public int four_of_a_kind()
@@ -152,36 +145,12 @@ public class Yatzy {
 
     public static int fullHouse(int d1, int d2, int d3, int d4, int d5)
     {
-        int[] tallies;
-        boolean _2 = false;
-        int i;
-        int _2_at = 0;
-        boolean _3 = false;
-        int _3_at = 0;
-
-        tallies = new int[6];
-        tallies[d1-1] += 1;
-        tallies[d2-1] += 1;
-        tallies[d3-1] += 1;
-        tallies[d4-1] += 1;
-        tallies[d5-1] += 1;
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 2) {
-                _2 = true;
-                _2_at = i+1;
-            }
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 3) {
-                _3 = true;
-                _3_at = i+1;
-            }
-
-        if (_2 && _3)
-            return _2_at * 2 + _3_at * 3;
-        else
+        if (three_of_a_kind() != 0 && two_pair() != 0){
+            return three_of_a_kind() + two_pair()-(2*three_of_a_kind()/3);
+        }
+        else{
             return 0;
+        }
     }
 }
 
